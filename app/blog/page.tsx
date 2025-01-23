@@ -1,40 +1,22 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+"use client";
 
-type PostProps = {
-  id: string;
-  title: string;
-}
+import { useEffect, useState } from "react";
+import { getAllPosts } from "@/services/getPosts";
+import Posts from "@/components/Posts";
 
-export const metadata: Metadata = {
-  title: "Blog | Next App"
-};
+export default function Blog() {
 
-async function getData() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts",
-    {
-      next: {
-        revalidate: 60,
-      },
-    }
-  );
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  return response.json();
-}
-
-export default async function Blog() {
-  const posts = await getData();
-
+  useEffect(() => {}, [])
+    getAllPosts().then(setPosts).finally(() => setLoading(false));
   return (
     <>
       <h1>Blog Page</h1>
-      <ul>
-        {posts.map(({ id, title }: PostProps) => (
-          <li key={id}>
-            <Link href={`/blog/${id}`}>{title}</Link>
-          </li>
-        ))}
-      </ul>
+      {loading ? <h3>Loading...</h3> : (
+        <Posts posts={posts} />
+      )}
     </>
   );
 }
