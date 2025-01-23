@@ -56,3 +56,7 @@ a {
   translate: -50%;
   bottom: 0;
 }
+
+.active {
+  color: red;
+}
